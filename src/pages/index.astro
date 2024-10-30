@@ -2,7 +2,30 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Pokemon from '../components/Pokemon.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+const pokemonsResponse = await fetch("https://pokeapi.co/api/v2/pokemon");
+const pokemonsData = await pokemonsResponse.json();
+const pokemonCount = pokemonsData.count;
+
+const count = 10
+const pokemonRandom = [...Array(count)].map(() =>
+  Math.round(Math.random() * pokemonCount),
+);
+
+const pokemons = []
+for await (const pokemonId of pokemonRandom){
+	try{
+		const response = await fetch(
+  		`https://pokeapi.co/api/v2/pokemon/${pokemonId}`,
+		)
+		const pokemon = await response.json()
+		pokemons.push(pokemon)
+	} catch (err) {
+		console.log(err)
+	}
+}
+
 ---
 
 <!doctype html>
@@ -12,8 +35,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	</head>
 	<body>
 		<Header />
+		<div class="pokemons">
+		{pokemons.map((pokemon)=> <Pokemon pokemon={pokemon} />)}
+		</div>
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+			<h1>🧑‍🚀 Hello, Dastan ()!</h1>
 			<p>
 				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
 				template serves as a lightweight, minimally-styled starting point for anyone looking to build
@@ -48,3 +74,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<Footer />
 	</body>
 </html>
+<style>
+  .pokemons {
+  	display: flex;
+  }
+</style>
