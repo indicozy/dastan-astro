@@ -1,0 +1,19 @@
+---
+import Pokemon from '../../components/Pokemon.astro';
+import LayoutPokemon from '../../layouts/LayoutPokemon.astro';
+export async function getStaticPaths() {
+	const { count } = await fetch('http://pokeapi.co/api/v2/pokemon').then((res) => res.json())
+	const pokemons = await fetch(`http://pokeapi.co/api/v2/pokemon?limit=${count}`).then((res) => res.json())
+	return pokemons.results.map((pokemon)=> ({params: {pokemonSlug: pokemon.name}}))
+}
+type Props = CollectionEntry<'blog'>;
+
+const { pokemonSlug } = Astro.params;
+const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonSlug}`).then((res) => res.json())
+---
+
+<LayoutPokemon pokemon={pokemon}>
+  <div class="bg-red-500">
+    <h1>{pokemon.name}</h1>
+  </div>
+</LayoutPokemon>

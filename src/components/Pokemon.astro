@@ -2,22 +2,12 @@
 const { pokemon } = Astro.props;
 const image = pokemon.sprites.front_default
 const {stats} = pokemon
-
-console.log(pokemon)
 ---
 
-<div class="pokemon">
+<div class="bg-[#eee] p-5 border border-[#333]">
   <img src={image} />
-  <p>{pokemon.name}</p>
+  <p class="font-bold text-2xl">{pokemon.name}</p>
   <div>
-{stats.map((stat)=> <div>{stat.stat.name}: {stat.base_stat}</div>)}
+{stats.map((stat)=> <div><span class="text-red-700">{stat.stat.name}</span>: {stat.base_stat}</div>)}
   </div>
 </div>
-<style>
-  .pokemon {
-    margin-left: 20px;
-    background-color: #eee;
-    padding: 20px;
-    border: 1px solid #333;
-  } 
-</style>
