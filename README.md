@@ -1,5 +1,7 @@
 # Astro Starter Kit: Blog
 
+Привет Дастан
+
 ```sh
 npm create astro@latest -- --template blog
 ```
