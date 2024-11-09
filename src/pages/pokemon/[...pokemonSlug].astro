@@ -2,10 +2,9 @@
 import Pokemon from '../../components/Pokemon.astro';
 import LayoutPokemon from '../../layouts/LayoutPokemon.astro';
 export async function getStaticPaths() {
-  return [{params: {pokemonSlug: 'ditto'}}]
-	// const { count } = await fetch('http://pokeapi.co/api/v2/pokemon').then((res) => res.json())
-	// const pokemons = await fetch(`http://pokeapi.co/api/v2/pokemon?limit=${count}`).then((res) => res.json())
-	// return pokemons.results.map((pokemon)=> ({params: {pokemonSlug: pokemon.name}}))
+	const { count } = await fetch('http://pokeapi.co/api/v2/pokemon').then((res) => res.json())
+	const pokemons = await fetch(`http://pokeapi.co/api/v2/pokemon?limit=${count}`).then((res) => res.json())
+	return pokemons.results.map((pokemon)=> ({params: {pokemonSlug: pokemon.name}}))
 }
 
 const { pokemonSlug } = Astro.params;
