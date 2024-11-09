@@ -2,18 +2,30 @@
 import Pokemon from '../../components/Pokemon.astro';
 import LayoutPokemon from '../../layouts/LayoutPokemon.astro';
 export async function getStaticPaths() {
-	const { count } = await fetch('http://pokeapi.co/api/v2/pokemon').then((res) => res.json())
-	const pokemons = await fetch(`http://pokeapi.co/api/v2/pokemon?limit=${count}`).then((res) => res.json())
-	return pokemons.results.map((pokemon)=> ({params: {pokemonSlug: pokemon.name}}))
+  return [{params: {pokemonSlug: 'ditto'}}]
+	// const { count } = await fetch('http://pokeapi.co/api/v2/pokemon').then((res) => res.json())
+	// const pokemons = await fetch(`http://pokeapi.co/api/v2/pokemon?limit=${count}`).then((res) => res.json())
+	// return pokemons.results.map((pokemon)=> ({params: {pokemonSlug: pokemon.name}}))
 }
-type Props = CollectionEntry<'blog'>;
 
 const { pokemonSlug } = Astro.params;
 const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonSlug}`).then((res) => res.json())
+const image = pokemon.sprites.front_default
+const {stats} = pokemon
 ---
 
 <LayoutPokemon pokemon={pokemon}>
-  <div class="bg-red-500">
-    <h1>{pokemon.name}</h1>
+  <div class="bg-[url('https://m.media-amazon.com/images/M/MV5BMzE0ZDU1MzQtNTNlYS00YjNlLWE2ODktZmFmNDYzMTBlZTBmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg')] bg-cover bg-center h-screen flex items-center justify-center relative">
+    <div class="absolute inset-0 bg-black opacity-30"></div> {/* Прозрачный фон для улучшения читаемости текста */}
+    
+    <div class="relative z-10 w-600 bg-gray-800 text-white flex flex-col items-center justify-center p-8 rounded-lg shadow-lg">
+      <img src={image} class="w-48 mb-4" alt={pokemon.name} /> {/* Увеличенное изображение Pokémon */}
+      <h1 class="text-4xl mb-4 text-center">{pokemon.name}</h1>
+      {stats.map((stat) => (
+        <div class="text-red-300">
+          <span class="font-bold">{stat.stat.name}:</span> {stat.base_stat}
+        </div>
+      ))}
+    </div>
   </div>
 </LayoutPokemon>
